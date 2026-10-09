@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+report.html
+assets/
+.idea/
+.vscode/
+# keep the folder, ignore auto-generated screenshots (commit the ones you use in the report on purpose with git add -f)
+screenshots/*.png
