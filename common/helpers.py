@@ -65,6 +65,13 @@ def register_new_user(driver, firstname="Test", lastname="User", password=DEFAUL
         "telephone": "0400000000",
         "password": password,
     }
+    submit_registration_form(driver, user)
+    wait_url_contains(driver, "account/success")
+    return user
+
+
+def submit_registration_form(driver, user):
+    """Fill the registration form with the given details and click Continue, without waiting for the result."""
     driver.get(url("account/register"))
     fill(driver, (By.ID, "input-firstname"), user["firstname"])
     fill(driver, (By.ID, "input-lastname"), user["lastname"])
@@ -74,8 +81,6 @@ def register_new_user(driver, firstname="Test", lastname="User", password=DEFAUL
     fill(driver, (By.ID, "input-confirm"), user["password"])
     js_click(driver, driver.find_element(By.ID, "input-agree"))
     driver.find_element(By.CSS_SELECTOR, "input[type='submit'][value='Continue']").click()
-    wait_url_contains(driver, "account/success")
-    return user
 
 
 def login(driver, email, password):
