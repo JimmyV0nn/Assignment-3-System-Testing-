@@ -11,6 +11,7 @@ Expected:
   - Success message "Your address has been successfully added" is shown
   - The new address appears in the Address Book list
 """
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
@@ -38,7 +39,7 @@ def test_add_new_address(driver, registered_user):
         fill(driver, (By.ID, field_id), value)
     Select(driver.find_element(By.ID, "input-country")).select_by_visible_text(COUNTRY)
     # The region list reloads by AJAX after choosing a country
-    WebDriverWait(driver, DEFAULT_TIMEOUT).until(
+    WebDriverWait(driver, DEFAULT_TIMEOUT, ignored_exceptions=(StaleElementReferenceException,)).until(
         lambda d: REGION in [o.text for o in Select(d.find_element(By.ID, "input-zone")).options]
     )
     Select(driver.find_element(By.ID, "input-zone")).select_by_visible_text(REGION)
