@@ -100,6 +100,12 @@ def logout(driver):
     driver.get(url("account/logout"))
 
 
+def get_error_messages(driver, timeout=DEFAULT_TIMEOUT):
+    """Return the texts of all red validation messages shown under form fields (waits for the first one)."""
+    wait_visible(driver, (By.CSS_SELECTOR, ".text-danger"), timeout)
+    return [e.text for e in driver.find_elements(By.CSS_SELECTOR, ".text-danger") if e.text.strip()]
+
+
 def get_success_alert(driver, timeout=DEFAULT_TIMEOUT):
     """Return the text of the green success alert shown after saving a form."""
     return wait_visible(driver, (By.CSS_SELECTOR, ".alert-success"), timeout).text
