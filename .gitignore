@@ -9,3 +9,4 @@ assets/
 .vscode/
 # keep the folder, ignore auto-generated screenshots (commit the ones you use in the report on purpose with git add -f)
 screenshots/*.png
+tests/D_cart_wishlist/results/
