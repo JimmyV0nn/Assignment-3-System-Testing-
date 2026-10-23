@@ -27,7 +27,7 @@ from selenium.common.exceptions import (
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-BASE = "https://ecommerce-playground.lambdatest.io/index.php"
+BASE = "https://opencart.abstracta.us/"
 DEFAULT_TIMEOUT = 25
 
 # Expected values are configured here once. If the live shop shows different

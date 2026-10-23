@@ -8,8 +8,8 @@ list to the cart.
 
 import pytest
 
-import helpers
-from helpers import MACBOOK
+from . import helpers
+from .helpers import MACBOOK
 
 
 @pytest.mark.scenario("D_TC03_S1", "Add MacBook Pro to an empty wish list")

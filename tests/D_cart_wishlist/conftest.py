@@ -19,7 +19,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-import helpers
+from . import helpers
 
 PROJECT_DIR = Path(__file__).resolve().parent
 

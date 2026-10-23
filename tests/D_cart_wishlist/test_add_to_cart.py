@@ -7,8 +7,8 @@ Scenario 3: add a different product (iPhone) next to MacBook Pro x2.
 
 import pytest
 
-import helpers
-from helpers import IPHONE, MACBOOK
+from . import helpers
+from .helpers import IPHONE, MACBOOK
 
 
 @pytest.mark.scenario("D_TC01_S1", "Add a single MacBook Pro to an empty cart")

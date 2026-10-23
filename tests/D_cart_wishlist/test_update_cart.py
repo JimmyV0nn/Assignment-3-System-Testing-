@@ -7,8 +7,8 @@ Scenario 3: remove the only product so the cart becomes empty.
 
 import pytest
 
-import helpers
-from helpers import MACBOOK
+from . import helpers
+from .helpers import MACBOOK
 
 
 def _cart_with_macbook(driver, quantity):
