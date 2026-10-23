@@ -45,16 +45,28 @@ def _fill_address_form(driver):
     for field_id, value in ADDRESS.items():
         fill(driver, (By.ID, field_id), value)
     Select(driver.find_element(By.ID, "input-country")).select_by_visible_text(COUNTRY)
-    # The region list reloads by AJAX after choosing a country
-    WebDriverWait(driver, DEFAULT_TIMEOUT, ignored_exceptions=(StaleElementReferenceException,)).until(
-        lambda d: REGION in [o.text for o in Select(d.find_element(By.ID, "input-zone")).options]
-    )
+    _wait_region_loaded(driver, REGION)
     Select(driver.find_element(By.ID, "input-zone")).select_by_visible_text(REGION)
+
+
+def _wait_region_loaded(driver, region=None):
+    """Wait for the AJAX region list to finish loading.
+
+    The site reloads the regions whenever the form opens or the country changes, and disables the
+    country list (so it is not submitted) until the load ends.
+    """
+    def loaded(d):
+        options = [o.text for o in Select(d.find_element(By.ID, "input-zone")).options]
+        ready = len(options) > 1 if region is None else region in options
+        return ready and d.find_element(By.ID, "input-country").is_enabled()
+
+    WebDriverWait(driver, DEFAULT_TIMEOUT, ignored_exceptions=(StaleElementReferenceException,)).until(loaded)
 
 
 def _add_address(driver):
     driver.get(url("account/address/add"))
     wait_visible(driver, (By.ID, "input-firstname"))
+    _wait_region_loaded(driver)
     _fill_address_form(driver)
     _submit(driver)
     return get_success_alert(driver)
@@ -64,6 +76,7 @@ def test_add_new_address(driver, registered_user):
     # Step 1: open the New Address form
     driver.get(url("account/address/add"))
     wait_visible(driver, (By.ID, "input-firstname"))
+    _wait_region_loaded(driver)
 
     # Step 2: fill in the form
     _fill_address_form(driver)
@@ -85,6 +98,7 @@ def test_add_address_required_fields_rejected(driver, registered_user):
     # Step 1: submit the empty form
     driver.get(url("account/address/add"))
     wait_visible(driver, (By.ID, "input-firstname"))
+    _wait_region_loaded(driver)
     _submit(driver)
 
     errors = get_error_messages(driver)
@@ -99,9 +113,10 @@ def test_add_address_required_fields_rejected(driver, registered_user):
     ):
         assert any(expected in e for e in errors), f"missing {expected!r} in {errors}"
 
-    # No address was created
+    # No address was created (the empty list has no rows; its message text varies between sites)
     driver.get(url("account/address"))
-    assert "No results" in wait_visible(driver, (By.ID, "content")).text
+    wait_visible(driver, (By.ID, "content"))
+    assert not driver.find_elements(By.CSS_SELECTOR, "#content table tr")
 
 
 def test_edit_address(driver, registered_user):
@@ -109,6 +124,7 @@ def test_edit_address(driver, registered_user):
     _add_address(driver)
     driver.find_element(By.CSS_SELECTOR, "#content a.btn-info").click()
     wait_visible(driver, (By.ID, "input-city"))
+    _wait_region_loaded(driver)
 
     # Step 2: change the city and save
     fill(driver, (By.ID, "input-city"), "Sydney")

@@ -1,6 +1,6 @@
 # 32571 Assessment Task 3 – System Testing
 
-Automated system tests for the [LambdaTest eCommerce Playground](https://ecommerce-playground.lambdatest.io/index.php?route=common/home), written with **Python + Selenium + pytest**.
+Automated system tests for the [LambdaTest eCommerce Playground](https://opencart.abstracta.us/), written with **Python + Selenium + pytest**.
 
 ## Team & modules
 

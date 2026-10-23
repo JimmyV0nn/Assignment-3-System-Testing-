@@ -1,7 +1,7 @@
 """Shared settings for all test modules."""
 import os
 
-BASE_URL = "https://ecommerce-playground.lambdatest.io/index.php"
+BASE_URL = "https://opencart.abstracta.us/"
 
 # Seconds to wait for elements before failing
 DEFAULT_TIMEOUT = 15
