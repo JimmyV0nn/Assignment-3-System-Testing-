@@ -79,7 +79,7 @@ def submit_registration_form(driver, user):
     fill(driver, (By.ID, "input-telephone"), user["telephone"])
     fill(driver, (By.ID, "input-password"), user["password"])
     fill(driver, (By.ID, "input-confirm"), user["password"])
-    js_click(driver, driver.find_element(By.ID, "input-agree"))
+    js_click(driver, driver.find_element(By.NAME, "agree"))
     driver.find_element(By.CSS_SELECTOR, "input[type='submit'][value='Continue']").click()
 
 
