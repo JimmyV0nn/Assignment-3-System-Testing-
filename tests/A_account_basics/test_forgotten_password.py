@@ -38,7 +38,7 @@ def test_s1_reset_with_registered_email(driver, registered_user):
 
     # An accepted request redirects to the login page.
     wait_url_contains(driver, "account/login")
-    # Check only the opening phrase of the success message, so a fix to defect D2's wording still passes.
+    # Check only the opening phrase of the success message, so a fix to defect D1's wording still passes.
     alert = wait_visible(driver, (By.CSS_SELECTOR, ".alert-success"))
     take_screenshot(driver, "TC-A03_S1_reset_email_sent")
     assert "An email with a confirmation link has been sent" in alert.text

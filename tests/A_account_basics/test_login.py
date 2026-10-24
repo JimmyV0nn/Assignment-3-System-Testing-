@@ -12,7 +12,6 @@ Scenario 2 - wrong password
 Scenario 3 - empty fields
   Steps: leave both fields empty, click Login
   Expected: the same no-match warning as Scenario 2 and the page stays on account/login
-  Known defect D1: the site can show an account-lockout message instead, so this scenario may fail.
 """
 from selenium.webdriver.common.by import By
 
@@ -56,7 +55,6 @@ def test_s3_login_with_empty_fields(driver):
     assert not login(driver, "", ""), "An empty login should be rejected"
 
     # An empty login is a wrong login, so the site should give the same no-match warning as Scenario 2.
-    # Defect D1: the site can show an account-lockout message here instead, which fails this assert.
     alert = wait_visible(driver, (By.CSS_SELECTOR, ".alert-danger"))
     take_screenshot(driver, "TC-A02_S3_empty_fields_result")
     assert NO_MATCH in alert.text
