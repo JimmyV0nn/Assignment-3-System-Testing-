@@ -26,7 +26,7 @@ def request_password_reset(driver, email):
     # Open the forgotten password form, enter the email and click Continue.
     driver.get(url("account/forgotten"))
     fill(driver, (By.ID, "input-email"), email)
-    driver.find_element(By.CSS_SELECTOR, "#content button[type='submit']").click()
+    driver.find_element(By.CSS_SELECTOR, "#content input[type='submit']").click()
 
 
 def test_s1_reset_with_registered_email(driver, registered_user):
