@@ -1,6 +1,6 @@
 """
 TC-A01  User Registration
-Module: A - Account Basics (Tommy)
+Module: A - Account Basics (Min Chia Huang)
 
 Scenario 1 - valid details
   Steps: open Register (route=account/register), fill every field with a never-used email, tick Privacy Policy, click Continue

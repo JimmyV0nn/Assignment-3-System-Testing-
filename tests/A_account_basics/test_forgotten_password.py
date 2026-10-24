@@ -1,6 +1,6 @@
 """
 TC-A03  Forgotten Password
-Module: A - Account Basics (Tommy)
+Module: A - Account Basics (Min Chia Huang)
 
 Scenario 1 - registered email
   Precondition: email E is registered (registered_user fixture), then logged out

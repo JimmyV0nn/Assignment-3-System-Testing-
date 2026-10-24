@@ -1,6 +1,6 @@
 """
 TC-A02  User Login
-Module: A - Account Basics (Tommy)
+Module: A - Account Basics (Min Chia Huang)
 
 Precondition (Scenarios 1-2): email E is registered (registered_user fixture), then logged out.
 Scenario 1 - valid credentials
