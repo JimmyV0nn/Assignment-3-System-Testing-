@@ -1,10 +1,10 @@
 """
 TC-A01  User Registration
-Module: A - Account Basics (Tommy)
+Module: A - Account Basics (Min Chia Huang)
 
 Scenario 1 - valid details
   Steps: open Register (route=account/register), fill every field with a never-used email, tick Privacy Policy, click Continue
-  Expected: redirect to account/success with the heading "Your Account Has Been Created!"
+  Expected: redirect to account/success with the message "Congratulations! Your new account has been successfully created!"
 Scenario 2 - email already registered
   Precondition: email E is already registered (registered_user fixture), then logged out
   Steps: submit the registration form again with email E
@@ -29,10 +29,10 @@ def test_s1_register_with_valid_details(driver):
     # Fill and submit the form with a never-used email; the helper waits for the account/success page.
     register_new_user(driver)
 
-    # The success page heading confirms the account was created, not just that the URL changed.
-    heading = wait_visible(driver, (By.CSS_SELECTOR, "#content h1"))
+    # The success page message confirms the account was created, not just that the URL changed.
+    content = wait_visible(driver, (By.ID, "content"))
     take_screenshot(driver, "TC-A01_S1_account_created")
-    assert "Your Account Has Been Created!" in heading.text
+    assert "Your new account has been successfully created!" in content.text
 
 
 def test_s2_register_with_already_registered_email(driver, registered_user):
