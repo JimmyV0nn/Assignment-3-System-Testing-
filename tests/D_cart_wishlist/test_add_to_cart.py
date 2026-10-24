@@ -1,4 +1,4 @@
-﻿"""Test case D_TC01 - Add to Cart.
+﻿"""Test case TC-D01 - Add to Cart.
 
 Scenario 1: add one iPhone to an empty cart.
 Scenario 2: add the same iPhone twice.
@@ -11,7 +11,7 @@ from . import helpers
 from .helpers import IMAC, IPHONE
 
 
-@pytest.mark.scenario("D_TC01_S1", "Add a single iPhone to an empty cart")
+@pytest.mark.scenario("TC-D01-S1", "Add a single iPhone to an empty cart")
 def test_add_single_item_to_empty_cart(driver, shots):
     # Precondition: a fresh browser session with an empty cart.
     helpers.open_cart(driver)
@@ -51,7 +51,7 @@ def test_add_single_item_to_empty_cart(driver, shots):
     helpers.note(f"screenshot evidence and totals: {totals}")
 
 
-@pytest.mark.scenario("D_TC01_S2", "Add the same iPhone twice from the product page")
+@pytest.mark.scenario("TC-D01-S2", "Add the same iPhone twice from the product page")
 def test_add_same_item_twice(driver, shots):
     helpers.open_cart(driver)
     assert helpers.cart_is_empty(driver), "Precondition failed: the cart was not empty at the start"
@@ -93,7 +93,7 @@ def test_add_same_item_twice(driver, shots):
     assert totals["Total"] == IPHONE["price"] * 2, f"Cart total: {totals['Total']}"
 
 
-@pytest.mark.scenario("D_TC01_S3", "Add a different product (iMac) to a cart holding iPhone x2")
+@pytest.mark.scenario("TC-D01-S3", "Add a different product (iMac) to a cart holding iPhone x2")
 def test_add_different_product(driver, shots):
     helpers.open_cart(driver)
     assert helpers.cart_is_empty(driver), "Precondition failed: the cart was not empty at the start"

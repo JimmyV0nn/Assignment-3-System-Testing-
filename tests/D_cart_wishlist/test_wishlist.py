@@ -1,4 +1,4 @@
-﻿"""Test case D_TC03 - Wishlist.
+﻿"""Test case TC-D03 - Wishlist.
 
 Every scenario runs with a throw-away account created as preparation, so the
 student's personal account is never touched. Scenario 1: add to wish list.
@@ -12,7 +12,7 @@ from . import helpers
 from .helpers import IPHONE
 
 
-@pytest.mark.scenario("D_TC03_S1", "Add iPhone to an empty wish list")
+@pytest.mark.scenario("TC-D03-S1", "Add iPhone to an empty wish list")
 def test_add_to_wishlist(driver, account, shots):
     helpers.ensure_logged_in(driver, account)
 
@@ -20,9 +20,15 @@ def test_add_to_wishlist(driver, account, shots):
     helpers.clear_wishlist(driver)
     helpers.open_wishlist(driver)
     assert helpers.wishlist_rows(driver) == [], "Precondition failed: the wish list was not empty"
-    content = driver.find_element("css selector", "#content").text.lower()
-    assert "your shopping cart is empty" in content, "Empty wish list message is missing"
     shots.capture("01_wishlist_empty_before")
+    # Defect: the empty wish list page shows the cart-empty message instead of
+    # a wish-list-empty message. The test asserts the correct text, so it fails
+    # while the site is defective.
+    content = driver.find_element("css selector", "#content").text.lower()
+    assert "your wish list is empty" in content, (
+        "DEFECT: empty wish list shows 'Your shopping cart is empty!' "
+        "instead of a wish-list-empty message"
+    )
 
     details = helpers.open_product_page(driver, IPHONE["product_id"])
     shots.capture("02_product_page_before_wishlist")
@@ -47,7 +53,7 @@ def test_add_to_wishlist(driver, account, shots):
     assert "in stock" in row["stock"].lower(), f"Wish list stock status: {row['stock']}"
 
 
-@pytest.mark.scenario("D_TC03_S2", "Remove iPhone from the wish list")
+@pytest.mark.scenario("TC-D03-S2", "Remove iPhone from the wish list")
 def test_remove_from_wishlist(driver, account, shots):
     helpers.ensure_logged_in(driver, account)
 
@@ -66,12 +72,17 @@ def test_remove_from_wishlist(driver, account, shots):
 
     rows = helpers.wishlist_rows(driver)
     assert rows == [], f"Wish list still contains: {[row['name'] for row in rows]}"
-    content = driver.find_element("css selector", "#content").text.lower()
-    assert "your shopping cart is empty" in content, "The empty wish list message is missing"
     shots.capture("03_wishlist_after_remove")
+    # Defect: after removal the wish list shows the cart-empty message instead
+    # of a wish-list-empty message; the test asserts the correct text.
+    content = driver.find_element("css selector", "#content").text.lower()
+    assert "your wish list is empty" in content, (
+        "DEFECT: empty wish list shows 'Your shopping cart is empty!' "
+        "instead of a wish-list-empty message"
+    )
 
 
-@pytest.mark.scenario("D_TC03_S3", "Add iPhone from the wish list to an empty cart")
+@pytest.mark.scenario("TC-D03-S3", "Add iPhone from the wish list to an empty cart")
 def test_wishlist_item_to_cart(driver, account, shots):
     helpers.ensure_logged_in(driver, account)
 

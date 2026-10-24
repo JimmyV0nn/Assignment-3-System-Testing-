@@ -1,4 +1,4 @@
-﻿"""Test case D_TC02 - Update Shopping Cart.
+﻿"""Test case TC-D02 - Update Shopping Cart.
 
 Scenario 1: increase the quantity of a cart line.
 Scenario 2: decrease the quantity of a cart line.
@@ -21,7 +21,7 @@ def _cart_with_iphone(driver, quantity):
         )
 
 
-@pytest.mark.scenario("D_TC02_S1", "Increase iPhone quantity from 1 to 2")
+@pytest.mark.scenario("TC-D02-S1", "Increase iPhone quantity from 1 to 2")
 def test_increase_quantity(driver, shots):
     _cart_with_iphone(driver, 1)
     helpers.open_cart(driver)
@@ -51,7 +51,7 @@ def test_increase_quantity(driver, shots):
     assert totals["Total"] == IPHONE["price"] * 2, f"Cart total: {totals['Total']}"
 
 
-@pytest.mark.scenario("D_TC02_S2", "Decrease iPhone quantity from 2 to 1")
+@pytest.mark.scenario("TC-D02-S2", "Decrease iPhone quantity from 2 to 1")
 def test_decrease_quantity(driver, shots):
     _cart_with_iphone(driver, 2)
     helpers.open_cart(driver)
@@ -78,7 +78,7 @@ def test_decrease_quantity(driver, shots):
     assert totals["Total"] == IPHONE["price"], f"Cart total: {totals['Total']}"
 
 
-@pytest.mark.scenario("D_TC02_S3", "Remove the only product and empty the cart")
+@pytest.mark.scenario("TC-D02-S3", "Remove the only product and empty the cart")
 def test_remove_product(driver, shots):
     _cart_with_iphone(driver, 1)
     helpers.open_cart(driver)

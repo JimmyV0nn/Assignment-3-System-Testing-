@@ -27,7 +27,9 @@ from selenium.common.exceptions import (
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-BASE = "https://opencart.abstracta.us/"
+from common.config import BASE_URL
+
+BASE = BASE_URL
 DEFAULT_TIMEOUT = 25
 
 # Expected values are configured here once. If the live shop shows different
