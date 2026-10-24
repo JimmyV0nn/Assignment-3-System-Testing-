@@ -10,3 +10,5 @@ assets/
 # keep the folder, ignore auto-generated screenshots (commit the ones you use in the report on purpose with git add -f)
 screenshots/*.png
 tests/D_cart_wishlist/results/
+# pytest result file (pytest.ini --junitxml) read by the report charts
+reports/
