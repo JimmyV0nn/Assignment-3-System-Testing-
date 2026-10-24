@@ -1,6 +1,6 @@
 """
 TC-A03  Forgotten Password
-Module: A - Account Basics (Tommy)
+Module: A - Account Basics (Min Chia Huang)
 
 Scenario 1 - registered email
   Precondition: email E is registered (registered_user fixture), then logged out
@@ -26,7 +26,7 @@ def request_password_reset(driver, email):
     # Open the forgotten password form, enter the email and click Continue.
     driver.get(url("account/forgotten"))
     fill(driver, (By.ID, "input-email"), email)
-    driver.find_element(By.CSS_SELECTOR, "#content button[type='submit']").click()
+    driver.find_element(By.CSS_SELECTOR, "#content input[type='submit']").click()
 
 
 def test_s1_reset_with_registered_email(driver, registered_user):
@@ -38,7 +38,7 @@ def test_s1_reset_with_registered_email(driver, registered_user):
 
     # An accepted request redirects to the login page.
     wait_url_contains(driver, "account/login")
-    # Check only the opening phrase of the success message, so a fix to defect D2's wording still passes.
+    # Check only the opening phrase of the success message, so a fix to defect D1's wording still passes.
     alert = wait_visible(driver, (By.CSS_SELECTOR, ".alert-success"))
     take_screenshot(driver, "TC-A03_S1_reset_email_sent")
     assert "An email with a confirmation link has been sent" in alert.text
