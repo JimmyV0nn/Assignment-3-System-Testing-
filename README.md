@@ -10,7 +10,7 @@ Automated system tests for the [LambdaTest eCommerce Playground](https://opencar
 | B. Account Management | Jimmy | Edit Account, Change Password, Address Book | `tests/B_account_management` |
 | C. Product Discovery | Rathana | Search, Category Filter, Product Compare | `tests/C_product_discovery` |
 | D. Shopping Cart & Wishlist | Virg | Add to Cart, Update Shopping Cart, Wishlist | `tests/D_cart_wishlist` |
-| E. Checkout & Orders | Eman | Guest Checkout, Registered Checkout, Order History | `tests/E_checkout_orders` |
+| E. Checkout & Orders | Jimmy | Guest Checkout, Registered Checkout, Order History | `tests/E_checkout_orders` |
 
 Test case IDs follow `TC-<module letter><number>`, e.g. `TC-B01`.
 
