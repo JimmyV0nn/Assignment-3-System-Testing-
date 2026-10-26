@@ -1,8 +1,17 @@
-
+  
 """
-TC-C03: Product Comparison
+TC-C03  Product Comparison
 Module: C - Product Discovery
-Scenarios: S01, S02, S03
+
+Scenario 1 - compare two products
+  Steps: add HTC Touch HD and iPhone, then open Product Comparison.
+  Expected: both product names appear as columns in the comparison table.
+Scenario 2 - compare three products
+  Steps: add HTC Touch HD, iPhone, and MacBook, then open Product Comparison.
+  Expected: all three product names appear as columns in the comparison table.
+Scenario 3 - remove a compared product
+  Steps: compare HTC Touch HD and iPhone, then remove HTC Touch HD.
+  Expected: HTC Touch HD disappears from the table while iPhone remains.
 """
 
 from selenium.webdriver.common.by import By
@@ -11,117 +20,104 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from common.config import BASE_URL, url
-from common.helpers import take_screenshot
+from common.helpers import take_screenshot, wait_visible
+
+
+def start_fresh(driver):
+    """Start each scenario without products saved from previous tests."""
+    driver.get(BASE_URL)
+    driver.delete_all_cookies()
+    driver.get(BASE_URL)
 
 
 def add_to_compare(driver, product_name):
-    """Search for a product and add it to comparison."""
+    """Find a product and add it to the comparison list."""
     driver.get(BASE_URL)
-
-    search = driver.find_element(By.NAME, "search")
+    search = wait_visible(driver, (By.NAME, "search"))
+    search.clear()
     search.send_keys(product_name, Keys.ENTER)
 
-    wait = WebDriverWait(driver, 15)
-
-    product = wait.until(
+    # Select the product card with the exact requested product name.
+    product = WebDriverWait(driver, 15).until(
         EC.visibility_of_element_located((
             By.XPATH,
-            f"//div[contains(@class,'product-thumb')]"
-            f"[.//a[normalize-space()='{product_name}']]"
+            f"//div[contains(@class, 'product-thumb')]"
+            f"[.//h4/a[normalize-space()='{product_name}']]"
         ))
     )
+    product.find_element(By.CSS_SELECTOR, "button[onclick*='compare.add']").click()
 
-    product.find_element(
-        By.CSS_SELECTOR, "button[onclick*='compare.add']"
-    ).click()
-
-    wait.until(
-        EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, ".alert-success")
-        )
+    # The success alert confirms the add action was accepted.
+    WebDriverWait(driver, 15).until(
+        EC.visibility_of_element_located((By.CSS_SELECTOR, ".alert-success"))
     )
+
+
+def comparison_names(driver):
+    """Read only the Product row in the comparison table."""
+    product_row = wait_visible(driver, (
+        By.XPATH,
+        "//div[@id='content']//table//tr[td[1][normalize-space()='Product']]"
+    ))
+    # Skip the first cell ('Product'); the others are product columns.
+    return [cell.text.strip() for cell in product_row.find_elements(By.XPATH, "./td[position()>1]")]
 
 
 def open_comparison(driver):
-    """Open the comparison page and return its content."""
     driver.get(url("product/compare"))
-
-    return WebDriverWait(driver, 15).until(
-        EC.visibility_of_element_located((By.ID, "content"))
-    )
+    wait_visible(driver, (By.ID, "content"))
+    return comparison_names(driver)
 
 
 def test_s1_compare_two_products(driver):
-    """S01: Compare two products."""
+    # Input: two products; expected: two matching comparison columns.
+    start_fresh(driver)
     add_to_compare(driver, "HTC Touch HD")
     add_to_compare(driver, "iPhone")
+    names = open_comparison(driver)
 
-    content = open_comparison(driver)
-
-    assert "HTC Touch HD" in content.text
-    assert "iPhone" in content.text
-
-    take_screenshot(driver, "TC-C03_S01_compare_two")
+    take_screenshot(driver, "TC-C03_S1_compare_two")
+    assert len(names) == 2 and all(
+        name in names for name in ("HTC Touch HD", "iPhone")
+    ), f"Expected two products in comparison table; found: {names}"
 
 
 def test_s2_compare_three_products(driver):
-    """S02: Compare three products."""
-    add_to_compare(driver, "HTC Touch HD")
-    add_to_compare(driver, "iPhone")
-    add_to_compare(driver, "MacBook")
+    # Input: three products; expected: three matching comparison columns.
+    start_fresh(driver)
+    for name in ("HTC Touch HD", "iPhone", "MacBook"):
+        add_to_compare(driver, name)
+    names = open_comparison(driver)
 
-    content = open_comparison(driver)
-
-    assert "HTC Touch HD" in content.text
-    assert "iPhone" in content.text
-    assert "MacBook" in content.text
-
-    take_screenshot(driver, "TC-C03_S02_compare_three")
-
+    take_screenshot(driver, "TC-C03_S2_compare_three")
+    assert len(names) == 3 and all(
+        name in names for name in ("HTC Touch HD", "iPhone", "MacBook")
+    ), f"Expected three products in comparison table; found: {names}"
 
 
 def test_s3_remove_product(driver):
-    """TC-C03 S03: Remove HTC Touch HD from comparison."""
+    # Input: remove HTC Touch HD; expected: iPhone remains.
+    start_fresh(driver)
     add_to_compare(driver, "HTC Touch HD")
     add_to_compare(driver, "iPhone")
+    names = open_comparison(driver)
+    assert "HTC Touch HD" in names and "iPhone" in names
 
-    content = open_comparison(driver)
-
-    assert "HTC Touch HD" in content.text
-    assert "iPhone" in content.text
-
-    # Find HTC Touch HD's column in the comparison table.
-    product_column = driver.find_element(
-        By.XPATH,
-        "//table[contains(@class,'table-bordered')]"
-        "//tbody/tr[1]/td[a[normalize-space()='HTC Touch HD']]"
+    # The Remove buttons are in the product columns, not a row labelled Remove.
+    # Match the product column (first column is the row label).
+    column = names.index("HTC Touch HD") + 2
+    remove_button = WebDriverWait(driver, 15).until(
+        EC.element_to_be_clickable((
+            By.XPATH,
+            "//div[@id='content']//table"
+            f"//tr/td[{column}]//a[contains(@class, 'btn-danger')]"
+        ))
     )
-
-    # Get the column position.
-    column = driver.execute_script(
-        "return Array.from(arguments[0].parentElement.children)"
-        ".indexOf(arguments[0]) + 1;",
-        product_column
-    )
-
-    # Click Remove in the same column.
-    remove_button = driver.find_element(
-        By.XPATH,
-        f"//table[contains(@class,'table-bordered')]"
-        f"//tbody/tr[last()]/td[{column}]"
-        f"//a[contains(@href,'remove=')]"
-    )
-
     remove_button.click()
 
     WebDriverWait(driver, 15).until(
-        lambda d: "HTC Touch HD" not in
-        d.find_element(By.ID, "content").text
+        lambda d: "HTC Touch HD" not in comparison_names(d)
     )
-
-    content = driver.find_element(By.ID, "content")
-
-    assert "HTC Touch HD" not in content.text
-    assert "iPhone" in content.text
-
-    take_screenshot(driver, "TC-C03_S03_remove_product")
+    names = comparison_names(driver)
+    take_screenshot(driver, "TC-C03_S3_remove_product")
+    assert names == ["iPhone"], f"Expected only iPhone after removal; found: {names}"
