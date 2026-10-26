@@ -79,8 +79,9 @@ def test_s2_compare_three_products(driver):
     take_screenshot(driver, "TC-C03_S02_compare_three")
 
 
+
 def test_s3_remove_product(driver):
-    """S03: Remove one product from comparison."""
+    """TC-C03 S03: Remove HTC Touch HD from comparison."""
     add_to_compare(driver, "HTC Touch HD")
     add_to_compare(driver, "iPhone")
 
@@ -89,23 +90,30 @@ def test_s3_remove_product(driver):
     assert "HTC Touch HD" in content.text
     assert "iPhone" in content.text
 
-    # Find the product's column.
-    cells = driver.find_elements(
-        By.CSS_SELECTOR, "#content table tbody tr:first-child td"
+    # Find HTC Touch HD's column in the comparison table.
+    product_column = driver.find_element(
+        By.XPATH,
+        "//table[contains(@class,'table-bordered')]"
+        "//tbody/tr[1]/td[a[normalize-space()='HTC Touch HD']]"
     )
 
-    index = next(
-        i for i, cell in enumerate(cells)
-        if "HTC Touch HD" in cell.text
+    # Get the column position.
+    column = driver.execute_script(
+        "return Array.from(arguments[0].parentElement.children)"
+        ".indexOf(arguments[0]) + 1;",
+        product_column
     )
 
-    # Remove the selected product.
-    buttons = driver.find_elements(
-        By.CSS_SELECTOR, "#content table a.btn-danger"
+    # Click Remove in the same column.
+    remove_button = driver.find_element(
+        By.XPATH,
+        f"//table[contains(@class,'table-bordered')]"
+        f"//tbody/tr[last()]/td[{column}]"
+        f"//a[contains(@href,'remove=')]"
     )
-    buttons[index - 1].click()
 
-    # Wait for the comparison page to update.
+    remove_button.click()
+
     WebDriverWait(driver, 15).until(
         lambda d: "HTC Touch HD" not in
         d.find_element(By.ID, "content").text
