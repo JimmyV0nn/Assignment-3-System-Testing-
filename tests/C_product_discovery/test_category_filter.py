@@ -1,7 +1,7 @@
     
 """
 TC-C02  Product Category Navigation
-Module: C - Product Discovery
+Module: C - Product Discovery (Rathana Leng)
 
 Scenario 1 - open a category containing products
   Steps: open the Cameras category from the navigation menu.

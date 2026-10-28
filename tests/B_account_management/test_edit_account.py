@@ -1,6 +1,6 @@
 """
 TC-B01  Edit Account Information
-Module: B - Account Management (Jimmy)
+Module: B - Account Management (Jinhao Feng)
 
 Precondition: a registered user is logged in.
 

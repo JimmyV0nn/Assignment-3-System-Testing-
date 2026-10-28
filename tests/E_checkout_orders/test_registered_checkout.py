@@ -1,6 +1,6 @@
 """
 TC-E02  Registered Checkout
-Module: E - Checkout & Orders (Jimmy)
+Module: E - Checkout & Orders (Jinhao Feng)
 
 Precondition: a newly registered user is logged in (registered_user fixture) and has no saved address.
 Scenario 1 - logged-in user completes an order

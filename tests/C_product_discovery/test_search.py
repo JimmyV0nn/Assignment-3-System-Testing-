@@ -1,7 +1,7 @@
 
 """
 TC-C01  Product Search
-Module: C - Product Discovery
+Module: C - Product Discovery (Rathana Leng)
 
 Scenario 1 - search with exact product name
   Steps: enter "HTC Touch HD" in the search box and submit.

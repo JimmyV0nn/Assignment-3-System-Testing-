@@ -1,6 +1,6 @@
 """
 TC-E01  Guest Checkout
-Module: E - Checkout & Orders (Jimmy)
+Module: E - Checkout & Orders (Jinhao Feng)
 
 Precondition: not logged in; the cart holds one iPhone.
 Scenario 1 - guest completes an order
