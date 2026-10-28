@@ -1,7 +1,7 @@
   
 """
 TC-C03  Product Comparison
-Module: C - Product Discovery
+Module: C - Product Discovery (Rathana Leng)
 
 Scenario 1 - compare two products
   Steps: add HTC Touch HD and iPhone, then open Product Comparison.

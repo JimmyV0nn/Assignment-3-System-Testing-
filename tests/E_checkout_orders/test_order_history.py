@@ -1,6 +1,6 @@
 """
 TC-E03  Order History
-Module: E - Checkout & Orders (Jimmy)
+Module: E - Checkout & Orders (Jinhao Feng)
 
 Precondition: a newly registered user is logged in (registered_user fixture).
 Scenario 1 - new account with no orders

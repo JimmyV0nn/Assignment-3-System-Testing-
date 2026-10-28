@@ -1,6 +1,6 @@
 """
 TC-B02  Change Password
-Module: B - Account Management (Jimmy)
+Module: B - Account Management (Jinhao Feng)
 
 Precondition: a registered user is logged in.
 
