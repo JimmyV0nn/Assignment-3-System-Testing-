@@ -1,9 +1,9 @@
 # Defect Log
 
 Defects found by the automated system tests on <https://opencart.abstracta.us/>.
-Each defect is backed by a test that asserts the **correct** behaviour, so the test fails while
-the defect exists and will pass once the site is fixed. Evidence screenshots are in
-`screenshots/defects/`.
+D-D1 and E-D1 are backed by tests that assert the **correct** behaviour, so those tests fail while
+the defect exists and will pass once the site is fixed. D1 and E-D2 were found in the tests'
+results and screenshots without failing a test. Evidence screenshots are in `screenshots/defects/`.
 
 ## Summary
 
@@ -12,13 +12,14 @@ the defect exists and will pass once the site is fixed. Evidence screenshots are
 | D1 | A. Account Basics | TC-A03 Forgotten Password, S1 | Low | Success message is ungrammatical ("sent your email address") | Open |
 | D-D1 | D. Shopping Cart & Wishlist | TC-D03 Wishlist, S1 and S2 | Medium | Empty wish list shows the shopping-cart message and heading "Account" | Open |
 | E-D1 | E. Checkout & Orders | TC-E03 Order History, S1 | Medium | Empty Order History shows the shopping-cart message and heading "Account" | Open |
+| E-D2 | E. Checkout & Orders | TC-E03 Order History, S3 (screenshot) | Low | Order details show "Order ID: #%s #32944": an unfilled format placeholder | Open |
 
 Severity scale: **High** – blocks a core task; **Medium** – the user is given wrong or misleading
 information but can still complete the task; **Low** – cosmetic (wording, layout).
 
 Expected full-suite result while these defects are open: **45 tests, 42 passed, 3 failed**
-(TC-D03 S1, TC-D03 S2, TC-E03 S1). D1 does not fail its test, because TC-A03 S1 only checks the
-opening phrase of the message.
+(TC-D03 S1, TC-D03 S2, TC-E03 S1). D1 and E-D2 do not fail a test: TC-A03 S1 only checks the
+opening phrase of the message, and TC-E03 S3 does not check the Order ID line.
 
 ---
 
@@ -58,6 +59,23 @@ opening phrase of the message.
 - **Actual:** heading "Account" and the message "Your shopping cart is empty!"
   (the breadcrumb still correctly reads "Account > Order History")
 - **Evidence:** `screenshots/defects/E-D1_empty_order_history.png`
+- **Note:** the Order History and Order Information pages also show the heading "Account" when
+  orders exist.
+
+## E-D2 – Order details show an unfilled "#%s" placeholder
+
+- **Found by:** the evidence screenshot of TC-E03 Order History, Scenario 3
+  (`tests/E_checkout_orders/test_order_history.py`)
+- **Severity:** Low (cosmetic; the real order number is still shown)
+- **Steps to reproduce:**
+  1. Log in and place an order (any product, Cash On Delivery).
+  2. Open My Account > Order History (`route=account/order`) and click View on the order.
+- **Expected:** "Order ID: #32944"
+- **Actual:** "Order ID: #%s #32944": the "#%s" format placeholder is printed instead of being
+  filled in
+- **Evidence:** `screenshots/defects/E-D2_order_id_placeholder.png`
+- **Note:** TC-E03 S3 checks the product, address, payment and shipping method, not the Order ID
+  line, so it passes.
 
 ---
 
@@ -69,7 +87,8 @@ opening phrase of the message.
   the site's language files for the account pages are probably misconfigured or overridden.
   Fixing that one configuration would likely fix both defects; other empty account lists
   (e.g. Downloads, Returns, Reward Points) are worth checking for the same problem.
-- **D1 is an isolated wording error** in the forgotten-password success text.
-- **All three defects concern messages, not functionality.** Every main flow tested (register,
+- **D1 and E-D2 are isolated text errors**: a missing word in the forgotten-password message, and
+  a format placeholder in the order details that the page never fills in.
+- **All four defects concern messages, not functionality.** Every main flow tested (register,
   log in, edit account, change password, address book, search, compare, cart, wish list,
   guest and registered checkout, order history) completed correctly.
